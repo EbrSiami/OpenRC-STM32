@@ -76,6 +76,9 @@ int currentEditingChannel = 0;
 bool isAdvEditMode = false;
 bool isDREditMode = false;
 
+// --- Auto-return to PAGE_MAIN3 Configuration ---
+const unsigned long AUTO_RETURN_TIMEOUT_MS = 7000; // 7 seconds
+unsigned long lastNavigationButtonTime = 0; // Track last button press
 
 // --- Trim Configuration ---
 const int TRIM_STEP = 10;
@@ -381,6 +384,61 @@ void scrollMenu(int &currentIndex, int maxIndex, bool scrollDown) {
 }
 
 /**
+ * @brief Resets the auto-return timeout timer.
+ * Call this whenever a navigation button is pressed.
+ */
+void resetAutoReturnTimer() {
+    lastNavigationButtonTime = millis();
+}
+
+/**
+ * @brief Checks if we should auto-return to PAGE_MAIN3 after inactivity.
+ * Call this in the main loop.
+ */
+void checkAutoReturn() {
+    unsigned long currentTime = millis();
+    bool timedOut = (currentTime - lastNavigationButtonTime >= AUTO_RETURN_TIMEOUT_MS);
+    
+    if (!timedOut) return;
+    
+    // ============================================================
+    // --- DO NOT AUTO-RETURN if in these conditions ---
+    // ============================================================
+    
+    // 1. Already on PAGE_MAIN3 - no point returning to itself
+    if (currentPage == PAGE_MAIN3) {
+        resetAutoReturnTimer(); // Keep resetting timer while on main page
+        return;
+    }
+    
+    // 2. In any edit mode - user is actively configuring something
+    if (isTimeEditMode || isDREditMode || isExpoEditMode || isAdvEditMode) {
+        resetAutoReturnTimer(); // Don't timeout while editing
+        return;
+    }
+    
+    // 3. In calibration menu - user is working with sticks
+    if (currentPage == PAGE_CALIBRATION) {
+        resetAutoReturnTimer(); // Don't timeout during calibration
+        return;
+    }
+    
+    // Reset all edit mode flags before returning
+    isTimeEditMode = false;
+    isDREditMode = false;
+    isExpoEditMode = false;
+    isAdvEditMode = false;
+    
+    // Return to main page
+    currentPage = PAGE_MAIN3;
+    settingsMenuIndex = 0;
+    
+    // User feedback
+    playBeepEvent(EVT_CONFIRM);
+    resetAutoReturnTimer(); // Reset timer after returning
+}
+
+/**
  * @brief Main State Machine for UI Navigation.
  * Handles button presses for Up, Down, and Enter across different pages.
  */
@@ -408,6 +466,7 @@ void handleNavigationButtons() {
     // ----------------------
     if (upButton.wasJustPressed() || upButton.isAutoRepeating(500, 150)) {
         playBeepEvent(EVT_NAV); // Now it beeps rapidly while holding!
+        resetAutoReturnTimer(); // Reset timeout when button is pressed
         
         if (currentPage == PAGE_CALIBRATION && calibStep == 0) {
             currentPage = PAGE_FEATURES;
@@ -449,6 +508,7 @@ void handleNavigationButtons() {
     // ------------------------
     if (downButton.wasJustPressed() || downButton.isAutoRepeating(500, 150)) {
         playBeepEvent(EVT_NAV);
+        resetAutoReturnTimer(); // Reset timeout when button is pressed
         
         if (currentPage == PAGE_CALIBRATION && calibStep == 0) {
             currentPage = PAGE_FEATURES;
@@ -489,6 +549,7 @@ void handleNavigationButtons() {
     // --- ENTER BUTTON Logic ---
     // -------------------------
     if (enterButton.wasJustPressed()) {
+        resetAutoReturnTimer(); // Reset timeout when button is pressed
 
         switch (currentPage) {
             
@@ -963,6 +1024,9 @@ void setup() {
     // }
 
     ResetData();
+    
+    // Initialize the auto-return timer
+    resetAutoReturnTimer();
 }
 
 // =============================================================================
@@ -1002,6 +1066,9 @@ void loop() {
     handleNavigationButtons();
 
     unsigned long t7 = millis();
+
+    // 3.5. Check auto-return to PAGE_MAIN3 on inactivity
+    checkAutoReturn();
 
     // 4. Input Mapping (ADC -> Channel Data)
 
