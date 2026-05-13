@@ -947,7 +947,7 @@ void drawCurrentPage(
             display.setTextSize(1);
             int xPos;
 
-            auto drawExpoBar = [](int y, uint8_t channelValue) {
+            auto drawExpoBar = [](int y, uint16_t channelValue) {
                 int barWidth = map(channelValue, 0, 2047, 0, 40);
                 display.drawRect(80, y, 42, 7, SSD1306_WHITE);
                 display.fillRect(81, y + 1, barWidth, 5, SSD1306_WHITE);

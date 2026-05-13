@@ -166,9 +166,9 @@ bool simulatorMode;     // by the way im not going to save it in EEPROM for safe
  */
 void ResetData() {
     data.throttle = 0;
-    data.pitch    = 128; // Center
-    data.roll     = 128; // Center
-    data.yaw      = 128; // Center
+    data.pitch    = 1024; // Center
+    data.roll     = 1024; // Center
+    data.yaw      = 1024; // Center
     data.aux1     = 128;
     data.aux2     = 128;
     data.aux3     = false;
