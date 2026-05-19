@@ -179,12 +179,13 @@ void ResetData() {
  * @brief a fast and light EMA filter without float :)
  */
 int applyAnalogFilter(int rawValue, int channelIndex) {
+    int diff = rawValue - filteredChannels[channelIndex];
 
-    // applying the filer with shif bit
-    filteredChannels[channelIndex] = filteredChannels[channelIndex] + ((rawValue - filteredChannels[channelIndex]) >> FILTER_SHIFT);
+    if (diff > 0) diff += (1 << (FILTER_SHIFT - 1));
+    else if (diff < 0) diff -= (1 << (FILTER_SHIFT - 1));
     
+    filteredChannels[channelIndex] += (diff >> FILTER_SHIFT);
     return filteredChannels[channelIndex];
-    // i just hope lovely bluepill can handle this, my cutie
 }
 
 void updateBatteryMonitor() {
@@ -306,15 +307,15 @@ void loadSettings() {
     }
 }
 
-bool isThrottleActive(uint8_t thr) {
+bool isThrottleActive(uint16_t thr) {
     if (settings.airplaneMode) return (thr > 12); // Above 5%
-    return (thr < 115 || thr > 140);             // Outside center deadband
+    return (thr < 900 || thr > 1200);             // Outside center deadband
 }
 
 /**
  * @brief Handles the countdown logic and triggers alarm when time is up.
  */
-void handleTimerLogic(uint8_t currentThrottle) {
+void handleTimerLogic(uint16_t currentThrottle) {
     unsigned long currentMillis = millis();
     unsigned long delta = currentMillis - lastTimerUpdateMillis;
     lastTimerUpdateMillis = currentMillis;
@@ -917,19 +918,24 @@ int processChannel(int rawValue,
     }
     val = constrain(val, 0, 4095);
 
-    // --- Step 3: EXPO ---
-    if (expoPercent != 0) {
-        // Normalize to -1.0 to +1.0
-        float normalized = (val - 2048) / 2048.0f;
-        
-        // Apply EXPO formula
-        float cube = normalized * normalized * normalized; // i think that its much faster than pow
-        float expo = expoPercent / 100.0f;
-        float output = (1.0f - expo) * normalized + expo * cube;
-        
-        // Convert back to 12-bit
-        val = 2048 + (int)(output * 2048.0f);
+// --- Step 3: EXPO ---
+if (expoPercent != 0) {
+    float normalized = (val - 2048) / 2048.0f;
+    float expo = expoPercent / 100.0f;
+    float output;
+    
+    if (expo > 0) {
+        output = (1.0f - expo) * normalized + expo * (normalized * normalized * normalized);
+    } else {
+        expo = -expo;
+        if (normalized > 0) {
+            output = (1.0f - expo) * normalized + expo * (pow(normalized, 1.0/3.0));
+        } else {
+            output = (1.0f - expo) * normalized + expo * (-pow(-normalized, 1.0/3.0));
+        }
     }
+    val = 2048 + (int)(output * 2048.0f);
+}
 
     // --- Step 4: Dual Rate (DR) ---
     if (dualRatePercent < 100) {
@@ -963,6 +969,16 @@ void setup() {
 
     pinMode(BUZZER_PIN, OUTPUT);
     digitalWrite(BUZZER_PIN, LOW);
+
+    pinMode(PB4, INPUT);
+    pinMode(PB5, INPUT);
+
+    pinMode(PA0, INPUT_ANALOG); // Roll
+    pinMode(PA1, INPUT_ANALOG); // Pitch
+    pinMode(PA2, INPUT_ANALOG); // Throttle
+    pinMode(PA3, INPUT_ANALOG); // Yaw
+    pinMode(PB0, INPUT_ANALOG); // AUX1 Pot
+    pinMode(PB1, INPUT_ANALOG); // AUX2 Pot
 
     // STM32 ADC setup
     analogReadResolution(12);
@@ -1138,8 +1154,10 @@ void loop() {
         int throttle_calibrated;
         if (abs(rawThrottle - settings.calibCenter[2]) <= deadband) {
             throttle_calibrated = 2048;
+        } else if (rawThrottle < settings.calibCenter[2]) {
+            throttle_calibrated = map(rawThrottle, settings.calibMin[2], settings.calibCenter[2] - deadband, 0, 2048);
         } else {
-            throttle_calibrated = map(rawThrottle, settings.calibMin[2], settings.calibMax[2], 0, 4095);
+            throttle_calibrated = map(rawThrottle, settings.calibCenter[2] + deadband, settings.calibMax[2], 2048, 4095);
         }
         
         int throttle_pre_map = throttle_calibrated;
