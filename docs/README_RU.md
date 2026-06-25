@@ -8,7 +8,6 @@
 ![Transmitter](https://img.shields.io/badge/firmware-v4.0.1--beta-cyan)
 ![Receiver](https://img.shields.io/badge/receiver-v1.3.2-cyan)
 ![Simulator](https://img.shields.io/badge/simulator-v1.7.0-brightgreen)
-![Stand With Iran](https://img.shields.io/badge/Stand_With-Iran_🇮🇷-green?color=red)
 
 **Открытая система радиоуправления на базе STM32** — прошивка передатчика, прошивка приемника и наземная станция для ПК для работы в симуляторе. Всё, что необходимо для создания полностью кастомного канала радиоуправления с нуля.
 

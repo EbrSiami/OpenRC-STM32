@@ -19,6 +19,7 @@ __pycache__/
 *.pyd
 .pytest_cache/
 
+binary/
 .vscode/
 .idea/
 .Old/
