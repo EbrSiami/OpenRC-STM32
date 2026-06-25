@@ -107,7 +107,6 @@ also when timer is finished it will tell you passed time with -00:00 (like -00:0
 
 ```text
 STM32-RC-Transmitter/
-├── include/              # Header files (if separated)
 ├── lib/                  # External libraries
 ├── src/                  # Source Code & Headers
 │   ├── main.cpp          # Entry point & Main Loop
