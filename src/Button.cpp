@@ -1,6 +1,6 @@
 /**
  * @file Button.cpp
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief Non-blocking Switch Debouncing Implementation
  * @version 4.0.1
  * @date 2026-04-08

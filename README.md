@@ -202,8 +202,8 @@ This project is built upon logic and lines of code that you wrote. Thank you for
 
 Прости, что мне скоро придётся уйти, но будь уверена. я тебя никогда не забуду. :(
 
-*   **Lead Developer:** Ebrahim Siami
-*   **Core Logic & Inspiration:** Marya 
+*   **Lead Developer:** Александр Королёв
+*   **Core Logic & Inspiration:** Мария ... :)
 
 **Third Party Libraries:**
 

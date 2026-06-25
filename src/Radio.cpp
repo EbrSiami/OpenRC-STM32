@@ -1,6 +1,6 @@
 /**
  * @file Radio.cpp
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief NRF24L01+ Communication Driver
  * @version 4.0.1
  * @date 2026-04-23

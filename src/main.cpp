@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief STM32 RC Transmitter Firmware - Main Entry Point
  * @version 4.0.1
  * @date 2026-04-25

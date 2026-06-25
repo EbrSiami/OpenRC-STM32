@@ -1,6 +1,6 @@
 /**
  * @file Button.h
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief Button Class Interface
  * @version 4.0.1
  * @date 2026-04-08

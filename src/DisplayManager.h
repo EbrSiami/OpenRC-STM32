@@ -1,6 +1,6 @@
 /**
  * @file DisplayManager.h
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief Interface for OLED Display Management
  * @version 4.0.1
  * @date 2026-04-23

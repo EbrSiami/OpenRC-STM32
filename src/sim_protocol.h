@@ -1,6 +1,6 @@
 /**
  * @file Settings.h
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief Simulator Data Protocol
  * @version 4.0.1
  * @date 2026-04-27

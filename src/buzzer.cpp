@@ -1,6 +1,6 @@
 /**
  * @file buzzer.cpp
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief buzzer handling engine
  * @version 4.0.1
  * @date 2026-04-18

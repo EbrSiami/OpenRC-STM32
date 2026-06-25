@@ -1,6 +1,6 @@
 /**
  * @file DisplayManager.cpp
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief OLED UI & Graphics Engine
  * @version 4.0.1
  * @date 2026-04-23
@@ -703,7 +703,7 @@ void drawCurrentPage(
             display.println("Firmware: V2.6.1");
             
             display.setCursor(11, 34);
-            display.println("Tel: +3--141592653");
+            display.println("Tel: xx--xxxxxxxxx");
             
             display.drawLine(10, 46, 118, 46, SSD1306_WHITE);
             

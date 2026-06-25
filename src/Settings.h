@@ -1,6 +1,6 @@
 /**
  * @file Settings.h
- * @author Ebrahim Siami
+ * @author Александр Королёв
  * @brief EEPROM Data Structure Definition
  * @version 4.0.1
  * @date 2026-04-13
