@@ -16,12 +16,25 @@ radio control link from scratch.
 
 > 📖 **README in other languages:** [فارسی](docs/README_FA.md) · [Русский](docs/README_RU.md)
 
+| Demo flight powered by this firmware and a DIY RC (check gallery bellow) |
+| :---: |
+| <https://github.com/user-attachments/assets/c1d1f3c6-33d3-46d3-a2a7-c24d4e3945ce> |
+
 ---
-## Due to ongoing wartime conditions, I was unable to conduct field flights for a long period, which left version 4.0.1 in a prolonged beta state. Today, after months of waiting, I decided to just say "screw it all" and went out to the flight field. 
+### Gallery
 
-## Fortunately, the new firmware version—featuring newly implemented capabilities such as Exponential (Expo), Dual Rates, and more—performed flawlessly. I am proud to announce that this release is officially out of beta and ready for stable use. 
+| Transmitter |
+| :---: |
+| <img src="docs/Photos/pic_1.jpg" width="50%"> |
+| <img src="docs/Photos/pic_2.jpg" width="50%"> |
 
-## Flight logs and further development details will be posted soon. Happy flying!
+| Receiver |
+| :---: |
+| <img src="docs/Photos/pic_3.jpg" width="50%"> |
+
+| Simulator app |
+| :---: |
+| <img src="docs/Photos/pic_4.png" width="50%"> |
 ---
 
 ## What's in this repository
